@@ -6,6 +6,7 @@ import com.tahafurkan.sandbox.blogapplication.payload.PostDto;
 import com.tahafurkan.sandbox.blogapplication.payload.PostResponse;
 import com.tahafurkan.sandbox.blogapplication.repository.PostRepository;
 import com.tahafurkan.sandbox.blogapplication.service.PostService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     PostRepository postRepository;
+
+    @Autowired
+    ModelMapper modelMapper;
 
     @Override
     public PostDto create(PostDto postDto) {
@@ -38,12 +42,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAll(int pageNo , int pageSize , String sortBy , String sortDir) {
+    public PostResponse getAll(int pageNo, int pageSize, String sortBy, String sortDir) {
 
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
 
-        Pageable pageable = PageRequest.of(pageNo , pageSize , sort);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
         Page<Post> postList = postRepository.findAll(pageable);
 
@@ -65,47 +69,51 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto getPostById(long id) {
-        Post post = postRepository.findById(id).orElseThrow(() ->new  ResourceNotFoundException("Post" , "id" ,id));
+        Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
         return mapToDTO(post);
     }
 
     @Override
     public PostDto update(long id, PostDto postDto) {
-      Post existingPost = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post","id",id));
+        Post existingPost = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
 
-      existingPost.setTitle(postDto.getTitle());
-      existingPost.setDescription(postDto.getDescription());
-      existingPost.setContent(postDto.getContent());
+        existingPost.setTitle(postDto.getTitle());
+        existingPost.setDescription(postDto.getDescription());
+        existingPost.setContent(postDto.getContent());
 
-      Post updatePost = postRepository.save(existingPost);
-      return mapToDTO(updatePost);
+        Post updatePost = postRepository.save(existingPost);
+        return mapToDTO(updatePost);
 
     }
 
     @Override
     public void delete(long id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post" , "id" , id));
+        Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
         postRepository.deleteById(id);
 
     }
 
     // convert Entity to DTO
-    private PostDto mapToDTO(Post post){
-        PostDto postDto = new PostDto();
-        postDto.setId(post.getId());
-        postDto.setTitle(post.getTitle());
-        postDto.setDescription(post.getDescription());
-        postDto.setContent(post.getContent());
+    private PostDto mapToDTO(Post post) {
+
+        PostDto postDto = modelMapper.map(post, PostDto.class);
+//        PostDto postDto = new PostDto();
+//        postDto.setId(post.getId());
+//        postDto.setTitle(post.getTitle());
+//        postDto.setDescription(post.getDescription());
+//        postDto.setContent(post.getContent());
         return postDto;
 
     }
 
     // convert DTO to Entity
-    private Post mapToEntity(PostDto postDto){
-        Post post = new Post();
-        post.setTitle(postDto.getTitle());
-        post.setDescription(postDto.getDescription());
-        post.setContent(postDto.getContent());
+    private Post mapToEntity(PostDto postDto) {
+
+        Post post = modelMapper.map(postDto, Post.class);
+//        Post post = new Post();
+//        post.setTitle(postDto.getTitle());
+//        post.setDescription(postDto.getDescription());
+//        post.setContent(postDto.getContent());
         return post;
     }
 
