@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,5 +65,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 //        });
 //        return new ResponseEntity<>(errors , HttpStatus.BAD_REQUEST);
 //    }
-
 }

@@ -2,7 +2,7 @@ package com.tahafurkan.sandbox.blogapplication.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class BlogAPIException extends RuntimeException{
+public class BlogAPIException extends RuntimeException {
 
     private HttpStatus httpStatus;
     private String message;

@@ -116,5 +116,4 @@ public class PostServiceImpl implements PostService {
 //        post.setContent(postDto.getContent());
         return post;
     }
-
 }
