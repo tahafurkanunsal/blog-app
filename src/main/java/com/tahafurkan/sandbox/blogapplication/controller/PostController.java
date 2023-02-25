@@ -4,6 +4,7 @@ import com.tahafurkan.sandbox.blogapplication.payload.PostDto;
 import com.tahafurkan.sandbox.blogapplication.payload.PostResponse;
 import com.tahafurkan.sandbox.blogapplication.service.PostService;
 import com.tahafurkan.sandbox.blogapplication.utils.AppConstants;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class PostController {
     PostService postService;
 
     @PostMapping
-    public ResponseEntity<PostDto> create(@RequestBody PostDto postDto) {
+    public ResponseEntity<PostDto> create(@Valid @RequestBody PostDto postDto) {
         return new ResponseEntity<>(postService.create(postDto), HttpStatus.CREATED);
     }
 
@@ -28,8 +29,8 @@ public class PostController {
             @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
-            @RequestParam (value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION , required = false) String sortDir) {
-        return postService.getAll(pageNo, pageSize, sortBy , sortDir);
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
+        return postService.getAll(pageNo, pageSize, sortBy, sortDir);
     }
 
     @GetMapping("/{id}")
@@ -38,7 +39,7 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostDto> update(@PathVariable(name = "id") long id, @RequestBody PostDto postDto) {
+    public ResponseEntity<PostDto> update(@PathVariable(name = "id") long id, @Valid @RequestBody PostDto postDto) {
         return new ResponseEntity<>(postService.update(id, postDto), HttpStatus.OK);
     }
 
