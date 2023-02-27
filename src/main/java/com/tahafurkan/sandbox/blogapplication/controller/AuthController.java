@@ -18,14 +18,15 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-    @PostMapping(value = {"/login" , "/signin"})
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
+    @PostMapping(value = {"/login", "/signin"})
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
         String response = authService.login(loginDto);
         return ResponseEntity.ok(response);
     }
-    @PostMapping(value = {"/register" , "signup"})
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto){
+
+    @PostMapping(value = {"/register", "signup"})
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
         String response = authService.register(registerDto);
-        return new ResponseEntity<>(response , HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
