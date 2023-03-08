@@ -49,8 +49,7 @@ public class SecurityConfiguration {
 
         httpSecurity.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers(HttpMethod.GET, "/posts/***").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                        authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 ).exceptionHandling(exception -> exception

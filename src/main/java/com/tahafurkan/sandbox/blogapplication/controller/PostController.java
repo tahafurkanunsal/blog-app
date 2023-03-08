@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/api/posts")
 public class PostController {
 
     @Autowired
@@ -51,5 +51,11 @@ public class PostController {
     public ResponseEntity<String> delete(@PathVariable(name = "id") long id) {
         postService.delete(id);
         return new ResponseEntity<>("Post entity deleted successfuly", HttpStatus.OK);
+    }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<List<PostDto>> getPostsByCategoryId(@PathVariable("id") Long categoryId) {
+        List<PostDto> postDtoList = postService.getPostsByCategoryId(categoryId);
+        return ResponseEntity.ok(postDtoList);
     }
 }
