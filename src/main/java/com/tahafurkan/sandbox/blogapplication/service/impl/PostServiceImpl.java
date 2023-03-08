@@ -1,9 +1,11 @@
 package com.tahafurkan.sandbox.blogapplication.service.impl;
 
+import com.tahafurkan.sandbox.blogapplication.entity.Category;
 import com.tahafurkan.sandbox.blogapplication.entity.Post;
 import com.tahafurkan.sandbox.blogapplication.exception.ResourceNotFoundException;
 import com.tahafurkan.sandbox.blogapplication.payload.PostDto;
 import com.tahafurkan.sandbox.blogapplication.payload.PostResponse;
+import com.tahafurkan.sandbox.blogapplication.repository.CategoryRepository;
 import com.tahafurkan.sandbox.blogapplication.repository.PostRepository;
 import com.tahafurkan.sandbox.blogapplication.service.PostService;
 import org.modelmapper.ModelMapper;
@@ -26,11 +28,18 @@ public class PostServiceImpl implements PostService {
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @Override
     public PostDto create(PostDto postDto) {
 
+        Category category = categoryRepository.findById(postDto.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "id", postDto.getCategoryId()));
+
         // convert DTO to Entity
         Post post = mapToEntity(postDto);
+        post.setCategory(category);
 
         Post newPost = postRepository.save(post);
 
@@ -77,9 +86,13 @@ public class PostServiceImpl implements PostService {
     public PostDto update(long id, PostDto postDto) {
         Post existingPost = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
 
+        Category category = categoryRepository.findById(postDto.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "id", postDto.getCategoryId()));
+
         existingPost.setTitle(postDto.getTitle());
         existingPost.setDescription(postDto.getDescription());
         existingPost.setContent(postDto.getContent());
+        existingPost.setCategory(category);
 
         Post updatePost = postRepository.save(existingPost);
         return mapToDTO(updatePost);
